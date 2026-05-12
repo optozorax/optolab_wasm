@@ -1,6 +1,6 @@
 {
-  "name": "egui Template PWA",
-  "short_name": "egui-template-pwa",
+  "name": "OptoLab",
+  "short_name": "OptoLab",
   "icons": [
     {
       "src": "./assets/icon-256.png",
