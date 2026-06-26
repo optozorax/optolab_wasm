@@ -126,7 +126,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             }
         }
     </style>
-<link rel="modulepreload" href="./portal_lab_app.js" crossorigin="anonymous" integrity="sha384-lBZlQGhmgm1YhpSWZ1cCSMqoxBrM3IKGLY3epaix40SQe5UWj8Z/ucSXW1U5vcwU"><link rel="preload" href="./portal_lab_app_bg.wasm" crossorigin="anonymous" integrity="sha384-i+uM3voAcdypv8rKcXtfdaDjHYwXVe5ruIgzDXVJ+ytXYOYb57DquJexJQtvZlNN" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./portal_lab_app.js" crossorigin="anonymous" integrity="sha384-+ZfSCVSSpf3hbOwOm1dPW45xq9zT4wnBDuQz9uNRp9ODnrRTY6Nbl5uAvQ0mVsXF"><link rel="preload" href="./portal_lab_app_bg.wasm" crossorigin="anonymous" integrity="sha384-6gIKj0d2cDnGGJ2YHwnJGoXoaBoAqYeLPSD4fXk/kJYFGRiTozQNxOAvlXWQJYgu" as="fetch" type="application/wasm"></head>
 
 <body>
     <!-- The WASM code will resize the canvas dynamically -->
@@ -141,13 +141,23 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
         <div class="lds-dual-ring"></div>
     </div>
 
-    <!--Register Service Worker. this will cache the wasm / js scripts for offline use (for PWA functionality). -->
-    <!-- Force refresh (Ctrl + F5) to load the latest files instead of cached files  -->
     <script>
-        // We disable caching during development so that we always view the latest version.
-        if ('serviceWorker' in navigator && window.location.hash !== "#dev") {
+        if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('sw.js');
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    registrations.forEach(function (registration) {
+                        registration.unregister();
+                    });
+                });
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(function (keys) {
+                return Promise.all(keys.filter(function (key) {
+                    return key === 'portal-lab-pwa' || key.indexOf('portal-lab-pwa-') === 0;
+                }).map(function (key) {
+                    return caches.delete(key);
+                }));
             });
         }
     </script>

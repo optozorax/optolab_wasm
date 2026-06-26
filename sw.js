@@ -1,25 +1,26 @@
-var cacheName = 'portal-lab-pwa';
-var filesToCache = [
-  './',
-  './index.html',
-  './portal_lab_app.js',
-  './portal_lab_app_bg.wasm',
-];
-
-/* Start the service worker and cache all of the app's content */
-self.addEventListener('install', function (e) {
-  e.waitUntil(
-    caches.open(cacheName).then(function (cache) {
-      return cache.addAll(filesToCache);
-    })
-  );
+/* Transitional cleanup for browsers that already installed the old cache-first
+   PWA worker. This worker does not handle fetches or cache app files. */
+self.addEventListener('install', function (event) {
+  event.waitUntil(self.skipWaiting());
 });
 
-/* Serve cached content when offline */
-self.addEventListener('fetch', function (e) {
-  e.respondWith(
-    caches.match(e.request).then(function (response) {
-      return response || fetch(e.request);
-    })
-  );
+self.addEventListener('activate', function (event) {
+  event.waitUntil((async function () {
+    var keys = await caches.keys();
+    await Promise.all(keys.filter(function (key) {
+      return key === 'portal-lab-pwa' || key.indexOf('portal-lab-pwa-') === 0;
+    }).map(function (key) {
+      return caches.delete(key);
+    }));
+
+    await clients.claim();
+    var windows = await clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true,
+    });
+    await Promise.all(windows.map(function (client) {
+      return client.navigate(client.url);
+    }));
+    await self.registration.unregister();
+  })());
 });
