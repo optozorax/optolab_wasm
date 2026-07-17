@@ -1,5 +1,7 @@
 /* Transitional cleanup for browsers that already installed the old cache-first
    PWA worker. This worker does not handle fetches or cache app files. */
+/* TODO: Remove this file and the matching index.html cleanup block after enough
+   existing users have visited the site and had the old worker unregistered. */
 self.addEventListener('install', function (event) {
   event.waitUntil(self.skipWaiting());
 });

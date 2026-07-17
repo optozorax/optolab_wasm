@@ -126,7 +126,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
             }
         }
     </style>
-<link rel="modulepreload" href="./portal_lab_app.js" crossorigin="anonymous" integrity="sha384-+ZfSCVSSpf3hbOwOm1dPW45xq9zT4wnBDuQz9uNRp9ODnrRTY6Nbl5uAvQ0mVsXF"><link rel="preload" href="./portal_lab_app_bg.wasm" crossorigin="anonymous" integrity="sha384-6gIKj0d2cDnGGJ2YHwnJGoXoaBoAqYeLPSD4fXk/kJYFGRiTozQNxOAvlXWQJYgu" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="./portal_lab_app.js" crossorigin="anonymous" integrity="sha384-QWVRd+otdWcUpqJ8AW2IUVFMBUeVyX5vOAal8iPEgk9L3v3mlJu6sCpMMBTkH8YJ"><link rel="preload" href="./portal_lab_app_bg.wasm" crossorigin="anonymous" integrity="sha384-WfTq28GhQCz8E7kaV550P10Stqjxa75pZlV+o49/XZWfNBKwVNHVZFm2rcbgzhmh" as="fetch" type="application/wasm"></head>
 
 <body>
     <!-- The WASM code will resize the canvas dynamically -->
@@ -142,6 +142,8 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
     </div>
 
     <script>
+        // TODO: Remove this cleanup block and sw.js after enough existing users
+        // have visited the site and had the old cache-first worker unregistered.
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 navigator.serviceWorker.getRegistrations().then(function (registrations) {
