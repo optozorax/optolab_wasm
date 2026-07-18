@@ -1818,7 +1818,7 @@ struct MiniJinja {
 
 ### Documentation
 
-Renders a `Text` template. Use `{{ expression }}` to insert a value and `{% ... %}` for Jinja statements such as conditions and loops. See the [MiniJinja template syntax](https://docs.rs/minijinja/2.18.0/minijinja/syntax/) for the complete language reference. Missing variables are errors instead of silently becoming empty text.
+Renders a `Text` template. Use `{{ expression }}` to insert a value and `{% raw %}{% ... %}{% endraw %}` for Jinja statements such as conditions and loops. See the [MiniJinja template syntax](https://docs.rs/minijinja/2.18.0/minijinja/syntax/) for the complete language reference. Missing variables are errors instead of silently becoming empty text.
 
 #### Inputs
 
@@ -1845,7 +1845,7 @@ Component types are represented as follows:
 * `MiniJinja` -> rendered string
 * `Collection` -> object whose keys are the contained component names and whose values use these same representations
 
-Matrices use column-major indexing: `matrix[column][row]`. Nested collections are flattened by `Collection`; access a key that is not a simple identifier with brackets, for example `values["group.radius"]`. To iterate through every entry, use `{% for name, value in values|items %}...{% endfor %}`.
+Matrices use column-major indexing: `matrix[column][row]`. Nested collections are flattened by `Collection`; access a key that is not a simple identifier with brackets, for example `values["group.radius"]`. To iterate through every entry, use `{% raw %}{% for name, value in values|items %}...{% endfor %}{% endraw %}`.
 
 #### Output variables and errors
 
