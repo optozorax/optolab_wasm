@@ -1818,14 +1818,14 @@ struct MiniJinja {
 
 ### Documentation
 
-Renders a `Text` template. Use `{{ expression }}` to insert a value and `{% raw %}{% ... %}{% endraw %}` for Jinja statements such as conditions and loops. See the [MiniJinja template syntax](https://docs.rs/minijinja/2.18.0/minijinja/syntax/) for the complete language reference. Missing variables are errors instead of silently becoming empty text.
+Renders a `Text` template. Use `{% raw %}{{ expression }}{% endraw %}` to insert a value and `{% raw %}{% ... %}{% endraw %}` for Jinja statements such as conditions and loops. See the [MiniJinja template syntax](https://docs.rs/minijinja/2.18.0/minijinja/syntax/) for the complete language reference. Missing variables are errors instead of silently becoming empty text.
 
 #### Inputs
 
 The default `template` is `Text::TextWithVariables`: give each component input a name, then use that name in the template. For example, bind `radius` to a `Float` component named `circle_radius`, then write:
 
 ```minijinja
-const float radius = {{ radius|fmt_float(3) }};
+const float radius = {% raw %}{{ radius|fmt_float(3) }}{% endraw %};
 ```
 
 Component types are represented as follows:
@@ -1845,7 +1845,7 @@ Component types are represented as follows:
 * `MiniJinja` -> rendered string
 * `Collection` -> object whose keys are the contained component names and whose values use these same representations
 
-Matrices use column-major indexing: `matrix[column][row]`. Nested collections are flattened by `Collection`; access a key that is not a simple identifier with brackets, for example `values["group.radius"]`. To iterate through every entry, use `{% raw %}{% for name, value in values|items %}...{% endfor %}{% endraw %}`.
+Matrices use column-major indexing: `matrix[column][row]`. Nested collections are flattened by `Collection`; access a key that is not a simple identifier with brackets, for example `values["group.radius"]`. To iterate through every entry, use `{% raw %}{% for name, value in values|items %}{% endraw %}...{% raw %}{% endfor %}{% endraw %}`.
 
 #### Output variables and errors
 
@@ -1857,7 +1857,7 @@ All built-in filters enabled by the app are described in the [MiniJinja filter d
 
 #### Custom filters
 
-`fmt_float(decimals?)` formats a number with at most 16 decimal places and removes trailing zeroes; it also turns rounded `-0` into `0`. `pad_left(width)` and `pad_right(width)` add spaces until the result reaches `width`. Filters can be chained: `{{ value|fmt_float(1)|pad_left(4) }}` renders `1.12` as ` 1.1`.
+`fmt_float(decimals?)` formats a number with at most 16 decimal places and removes trailing zeroes; it also turns rounded `-0` into `0`. `pad_left(width)` and `pad_right(width)` add spaces until the result reaches `width`. Filters can be chained: `{% raw %}{{ value|fmt_float(1)|pad_left(4) }}{% endraw %}` renders `1.12` as ` 1.1`.
 
 ---
 
